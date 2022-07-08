@@ -14,7 +14,7 @@ change_y = 1
 
 
 while True:
-    while ball_y < 3:
+    while ball_y < 4:
 
         if button_b.was_pressed() and paddle_x < 3:
             paddle_x += 1
@@ -31,6 +31,9 @@ while True:
         sleep(500)
         display.clear()
         ball_y += 1
+
+    if ball_y == 4:
+        break
 
     while ball_y > 0:
         if button_b.was_pressed() and paddle_x < 3:
@@ -49,8 +52,8 @@ while True:
         display.clear()
         ball_y -= 1
 
-
-
+# game over
+display.show(Image.DUCK)
 
 
 
