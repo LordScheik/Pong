@@ -1,17 +1,25 @@
 from microbit import *
 import speech
+import os
+import random
 
 paddle_x = 2
 paddle_y = 4
 paddle_length = 2
 
-ball_x = 3
-ball_y = 1
+ball_x = random.choice([1, 2, 3])
+ball_y = random.choice([1, 2])
 
-change_x = 1
-change_y = 1
+change_x = random.choice([-1, 1])
+change_y = random.choice([-1, 1])
+
+highscore = 0
+score = 0
 
 ANIMATION_SPEED = 150
+
+FILE_NAME = 'score.txt'
+
 
 while True:
     for x in range(0, 5):
@@ -51,12 +59,20 @@ while True:
     if button_a.is_pressed() and button_b.is_pressed():
         break
 
+# read saved highscore
+for file_name in os.listdir():
+    if file_name == FILE_NAME:
+        with open(file_name) as file:
+            highscore = int(file.read())
+
+display.scroll(highscore)
 
 display.scroll('Start')
-speech.say('Start')
+#speech.say('Start')
 
 for i in range(paddle_length):
     display.set_pixel(paddle_x + i, paddle_y, 9)
+
 display.set_pixel(ball_x, ball_y, 9)
 sleep(500)
 
@@ -71,6 +87,7 @@ while True:
 
     if ball_x in range(paddle_x, paddle_x + paddle_length) and ball_y == 3:
         change_y *= -1
+        score += 1
 
     ball_x += change_x
     ball_y += change_y
@@ -91,4 +108,12 @@ while True:
 
 # game over
 display.show(Image.DUCK)
-speech.say('Game Over')
+#speech.say('Game Over')
+
+# save score
+if score > highscore:
+    with open(FILE_NAME, 'w') as file:
+        file.write(str(score))
+display.scroll(score)
+
+
